@@ -60,6 +60,15 @@ func IsMobile(phone string) bool {
 	return true
 }
 
+// IsEmail 判断是否是有效的邮箱
+// http://www.jsons.cn/reg/ 这个地址里面有更多的正则内容
+func IsEmail(email string) bool {
+	if m, _ := regexp.MatchString(`^[a-zA-Z0-9_]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$`, email); !m {
+		return false
+	}
+	return true
+}
+
 // StrFilterGetChinese 获取中文字符串
 func StrFilterGetChinese(src string) string {
 	cnRegexp := regexp.MustCompile("^[\u4e00-\u9fa5]$")

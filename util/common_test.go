@@ -45,3 +45,10 @@ func TestArrayUnique(t *testing.T) {
 	fmt.Println(unique == nil)
 	fmt.Printf("%v ,%p", unique, unique)
 }
+
+func TestIsEmail(t *testing.T) {
+	email1 := "8888@qq.com"
+	fmt.Println(IsEmail(email1))
+	email2 := "shir?dong@qq.com"
+	fmt.Println(IsEmail(email2))
+}
