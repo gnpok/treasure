@@ -35,7 +35,7 @@ func TestArraySearch(t *testing.T) {
 		a[i] = i + 2
 	}
 	fmt.Println(a)
-	idx := ArraySearch(a, 6)
+	idx := ArraySearch(a, "1")
 	fmt.Println(idx)
 }
 
@@ -51,4 +51,9 @@ func TestIsEmail(t *testing.T) {
 	fmt.Println(IsEmail(email1))
 	email2 := "shir?dong@qq.com"
 	fmt.Println(IsEmail(email2))
+}
+
+func TestRand1(t *testing.T) {
+	nums := GetRandNums(1, 100, 1000)
+	fmt.Println(nums)
 }

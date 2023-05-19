@@ -123,3 +123,21 @@ func ArrayUnique(array []int) []int {
 	}
 	return array[:left+1]
 }
+
+// GetRandNum 获取一个随机数
+func GetRandNum(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	//[min,max)包含最小值,不包含最大值
+	return rand.Intn(max-min) + min
+}
+
+// GetRandNums 获取多个随机数
+func GetRandNums(min, max, num int) []int {
+	ret := make([]int, 0, num)
+	for i := 0; i < num; i++ {
+		time.Sleep(time.Nanosecond * 1)
+		tmpNum := GetRandNum(min, max)
+		ret = append(ret, tmpNum)
+	}
+	return ret
+}
