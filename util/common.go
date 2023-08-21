@@ -141,3 +141,19 @@ func GetRandNums(min, max, num int) []int {
 	}
 	return ret
 }
+
+// IsOpenId 判断是否是openid
+func IsOpenId(openid string) bool {
+	if m, _ := regexp.MatchString(`^[_A-Za-z0-9\-]{1,40}$`, openid); !m {
+		return false
+	}
+	return true
+}
+
+// IsAppId 判断是否是appid
+func IsAppId(appid string) bool {
+	if m, _ := regexp.MatchString(`^wx[_A-Za-z0-9\-]{10,20}$`, appid); !m {
+		return false
+	}
+	return true
+}
