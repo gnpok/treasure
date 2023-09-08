@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -104,29 +105,33 @@ func ArraySearch(arr interface{}, d interface{}) int {
 	return -1
 }
 
-// ArrayUnique 删除元素中重复的
-func ArrayUnique(array []int) []int {
-	//如果是空切片，则返回nil
-	if len(array) == 0 {
-		return nil
-	}
-	//用两个标气来比较相邻位置的值
-	//如果一样，则继续
-	//如果不一样,则把right指向的赋值给left下一位
-	left, right := 0, 1
-	for ; right < len(array); right++ {
-		if array[left] == array[right] {
-			continue
+// InArray 是否在数组中
+func InArray[T comparable](item T, slice []T) bool {
+	for _, v := range slice {
+		if v == item {
+			return true
 		}
-		left++
-		array[left] = array[right]
 	}
-	return array[:left+1]
+	return false
+}
+
+// ArrayUnique 切片数据去重
+func ArrayUnique[T comparable](slice []T) []T {
+	mData := make(map[T]struct{})
+	arr := make([]T, 0, len(slice))
+	for _, val := range slice {
+		if _, ok := mData[val]; !ok {
+			mData[val] = struct{}{}
+			arr = append(arr, val)
+		}
+	}
+	return arr
 }
 
 // GetRandNum 获取一个随机数
 func GetRandNum(min, max int) int {
-	rand.Seed(time.Now().UnixNano())
+	//rand.Seed(time.Now().UnixNano()) //rand.Seed在go高版本中弃用了
+	rand.NewSource(time.Now().UnixNano())
 	//[min,max)包含最小值,不包含最大值
 	return rand.Intn(max-min) + min
 }
@@ -135,9 +140,69 @@ func GetRandNum(min, max int) int {
 func GetRandNums(min, max, num int) []int {
 	ret := make([]int, 0, num)
 	for i := 0; i < num; i++ {
-		time.Sleep(time.Nanosecond * 1)
+		//time.Sleep(time.Nanosecond * 1)
 		tmpNum := GetRandNum(min, max)
 		ret = append(ret, tmpNum)
 	}
 	return ret
+}
+
+// IsNumeric 判断字符串是否是数字字符串
+func IsNumeric(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
+}
+
+// SubString 截取字符串子字符串
+func SubString(s string, start int, length int) string {
+	runes := []rune(s)
+	end := start + length
+	if start < 0 {
+		start = 0
+	}
+	if end > len(runes) {
+		end = len(runes)
+	}
+	return string(runes[start:end])
+}
+
+// StructToMap Convert struct to map.
+// This function first tries to use the bson tag, and if the bson tag does not exist, it will use the json tag.
+// if both bson and json tags do not exist, then it will use the field name as the key. Additionally,
+// if the tag value is "-", this field will be ignored and not added to the map.
+// https://github.com/mix-go/mix/blob/master/src/xutil/xconv/conv.go 采用的
+// go语言里面struct里面变量如果大写则是public,如果是小写则是private的，private的时候通过反射不能获取其值
+// struct里面需要都是大写不然panic: reflect.Value.Interface: cannot return value obtained from unexported field or method
+func StructToMap(i interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	inputType := reflect.TypeOf(i)
+	inputVal := reflect.ValueOf(i)
+
+	if inputType.Kind() == reflect.Ptr {
+		inputType = inputType.Elem()
+		inputVal = inputVal.Elem()
+	}
+
+	for i := 0; i < inputType.NumField(); i++ {
+		field := inputType.Field(i)
+		value := inputVal.Field(i).Interface()
+
+		key := field.Tag.Get("bson")
+		if key == "" {
+			key = field.Tag.Get("json")
+		}
+
+		if key == "-" {
+			continue
+		}
+
+		key = strings.Split(key, ",")[0]
+		if key == "" {
+			key = field.Name
+		}
+
+		result[key] = value
+	}
+
+	return result
 }

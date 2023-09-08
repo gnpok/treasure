@@ -40,10 +40,22 @@ func TestArraySearch(t *testing.T) {
 }
 
 func TestArrayUnique(t *testing.T) {
-	var array []int
-	unique := ArrayUnique(array)
-	fmt.Println(unique == nil)
-	fmt.Printf("%v ,%p", unique, unique)
+	//var array []int = []int{1, 1, 3, 3, 4, 4, 5}
+	//unique := ArrayUnique(array)
+	//fmt.Println(unique == nil)
+	//fmt.Printf("%v ,%p", unique, unique)
+	//deep := 2
+	//nums := make([]int, 0, 2*deep)
+	//for i := 0; i < 2; i++ {
+	//	for j := 1; j <= deep; j++ {
+	//		nums = append(nums, j)
+	//	}
+	//}
+	nums := []int{1, 2, 1, 2}
+	fmt.Printf("%#v ,%p\n", nums, nums)
+	nums1 := ArrayUnique(nums)
+	fmt.Printf("%#v ,%p", nums1, nums1)
+
 }
 
 func TestIsEmail(t *testing.T) {
@@ -56,4 +68,18 @@ func TestIsEmail(t *testing.T) {
 func TestRand1(t *testing.T) {
 	nums := GetRandNums(1, 100, 1000)
 	fmt.Println(nums)
+}
+
+type User struct {
+	Name string `-`
+	Age  uint8
+}
+
+func TestStructToMap(t *testing.T) {
+	user := User{
+		Name: "demo",
+		Age:  18,
+	}
+	toMap := StructToMap(&user)
+	fmt.Println(toMap)
 }

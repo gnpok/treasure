@@ -1,6 +1,6 @@
 module github.com/gnpok/treasure
 
-go 1.17
+go 1.20
 
 require github.com/beego/beego/v2 v2.0.7
 
