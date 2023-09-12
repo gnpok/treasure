@@ -1,6 +1,8 @@
 package util
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"strings"
 	"testing"
@@ -82,4 +84,12 @@ func TestStructToMap(t *testing.T) {
 	}
 	toMap := StructToMap(&user)
 	fmt.Println(toMap)
+}
+
+func TestPack(t *testing.T) {
+	packData, _ := Pack([]byte("hello world"))
+	//这里已经得到了二进制数据，所以直接用数据进行解包，在tcp服务器中要把conn传递进来进行解包
+	reader := bytes.NewReader(packData)
+	unpackData, _ := Unpack(bufio.NewReader(reader))
+	fmt.Println(unpackData)
 }
