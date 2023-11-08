@@ -131,6 +131,61 @@ func ArrayUnique[T comparable](slice []T) []T {
 	return arr
 }
 
+// ArrayToMap 将切片转为map
+func ArrayToMap[T comparable](data []T) map[T]struct{} {
+	m := make(map[T]struct{})
+	for _, _val := range data {
+		if _, ok := m[_val]; !ok {
+			m[_val] = struct{}{}
+		}
+	}
+	return m
+}
+
+// ArrayFilter 切片根据条件过滤
+func ArrayFilter[T comparable](data []T, fn func(item T) bool) []T {
+	res := make([]T, 0)
+	for _, _val := range data {
+		match := fn(_val)
+		if match == true {
+			res = append(res, _val)
+		}
+	}
+	return res
+}
+
+// ArrayFind 切片查找指定条件的数据
+func ArrayFind[T comparable](data []T, fn func(item T) bool) *T {
+	for _, _val := range data {
+		match := fn(_val)
+		if match == true {
+			return &_val
+		}
+	}
+	return nil
+}
+
+// ArrayFindIdx 切片查找指定条件数据的索引，若未找到则为-1
+func ArrayFindIdx[T comparable](data []T, fn func(item T) bool) int {
+	for _k, _val := range data {
+		match := fn(_val)
+		if match == true {
+			return _k
+		}
+	}
+	return -1
+}
+
+// ArrayMap 生成对应格式的数据切片
+func ArrayMap[T comparable, E comparable](data []T, fn func(item T) E) []E {
+	ret := make([]E, 0, len(data))
+	for _, _val := range data {
+		tmpVal := fn(_val)
+		ret = append(ret, tmpVal)
+	}
+	return ret
+}
+
 // GetRandNum 获取一个随机数
 func GetRandNum(min, max int) int {
 	//rand.Seed(time.Now().UnixNano()) //rand.Seed在go高版本中弃用了

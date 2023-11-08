@@ -93,3 +93,62 @@ func TestPack(t *testing.T) {
 	unpackData, _ := Unpack(bufio.NewReader(reader))
 	fmt.Println(unpackData)
 }
+
+func TestArrayToMap(t *testing.T) {
+	names := []string{"张三", "李四", "王五"}
+	toMap := ArrayToMap(names)
+	fmt.Println(toMap)
+}
+
+type Book struct {
+	ID   int
+	Name string
+}
+
+func TestArrayFilter(t *testing.T) {
+	books := []Book{
+		{
+			ID:   1,
+			Name: "php",
+		},
+		{
+			ID:   2,
+			Name: "go",
+		},
+		{
+			ID:   3,
+			Name: "JAVA",
+		},
+	}
+	//ArrayFind、ArrayFindIdx与之类似
+	filter := ArrayFilter(books, getBookMatch)
+	fmt.Println(filter)
+}
+
+func getBookMatch(b Book) bool {
+	if b.ID == 3 {
+		return true
+	}
+	return false
+}
+
+func TestArrayMap(t *testing.T) {
+	books := []Book{
+		{
+			ID:   1,
+			Name: "php",
+		},
+		{
+			ID:   2,
+			Name: "go",
+		},
+		{
+			ID:   3,
+			Name: "JAVA",
+		},
+	}
+	ids := ArrayMap(books, func(item Book) string {
+		return fmt.Sprintf("%d+ABC", item.ID)
+	})
+	fmt.Println(ids)
+}
