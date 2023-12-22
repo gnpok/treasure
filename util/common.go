@@ -346,3 +346,9 @@ func UnpackByte(binData []byte) ([]byte, error) {
 	// 读取真正的消息数据
 	return pack, nil
 }
+
+func TT(byteContent []byte) {
+	//byte与*bufio.Reader的转换
+	rd := bytes.NewReader(byteContent)
+	r := bufio.NewReader(rd)
+}
