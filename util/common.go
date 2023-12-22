@@ -322,3 +322,27 @@ func Unpack(reader *bufio.Reader) (string, error) {
 	}
 	return string(pack[4:]), nil
 }
+
+func UnpackByte(binData []byte) ([]byte, error) {
+	// 读取消息的长度
+	dataBuff := bytes.NewReader(binData)
+	var (
+		msgId  int16 //2个字节消息ID
+		length int32 //4个字节的消息长度
+	)
+	//读MsgID
+	if err := binary.Read(dataBuff, binary.BigEndian, &msgId); err != nil {
+		return nil, err
+	}
+	//读消息长度
+	if err := binary.Read(dataBuff, binary.BigEndian, &length); err != nil {
+		return nil, err
+	}
+	// Buffered返回缓冲中现有的可读取的字节数。
+	pack := make([]byte, int(length))
+	if err := binary.Read(dataBuff, binary.BigEndian, &pack); err != nil {
+		return nil, err
+	}
+	// 读取真正的消息数据
+	return pack, nil
+}
